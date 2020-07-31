@@ -14,10 +14,10 @@ As is the spirit of Docker nothing will be saved on the container itself! If you
 
 # Starting Container
 
-To run this docker container issue the following command in your terminal.
+To run this docker container issue the following command in your terminal. /SOME_LOCAL_PATH should be replaced by the path you wish to save any R Scripts or generated data.
 
 ```bash
-docker run --rm --name 4ce -v /tmp:/c19i2b2 -p 8787:8787 -p 2200:22 -d dbmi/4ce-analysis:latest
+docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 -p 8787:8787 -p 2200:22 -d dbmi/4ce-analysis:latest
 ```
 
 This will run the container in the background. If you need to stop the container you can issue the following docker command.
