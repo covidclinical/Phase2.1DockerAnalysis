@@ -56,7 +56,7 @@ From here you can run an R command line session.
 
 ## Running container as an interactive R session
 
-One final option for the container is if you want to simply run it like an interactive R session. The container will exit after you close your R session.
+One final option for the container is if you want to simply run it like an interactive R session. The container will exit after you close your R session. Note, this command starts the container so you can't already have one running when issuing it. The --rm flag will ensure that when this container exits the container is stopped and cleaned up.
 
 ```bash
 docker run --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 --rm -it dbmi/4ce-analysis:latest R
