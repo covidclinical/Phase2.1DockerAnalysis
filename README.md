@@ -38,7 +38,7 @@ Running this container with the default command starts an SSH Server as well as 
 
 ## Connecting to RStudio Server via localhost
 
-If you are running this on your own machine you can use localhost:8787 to access R Studio Server. The default username and password you can use is dockeruser/dockerpassword. 
+If you are running this on your own machine you can use http://localhost:8787 to access R Studio Server. The default username and password you can use is dockeruser/dockerpassword. 
 
 ## Connecting to RStudio Server via IP Address of container
 
