@@ -71,3 +71,17 @@ If you ever need to restart rstudio server inside the container
 ```bash
 /usr/sbin/rstudio-server restart
 ```
+
+# Developer Information
+
+If you want to build your own copy of this container you can use
+
+```bash
+docker build .
+```
+
+You can optionally specify a tag when building to reference later.
+
+```bash
+docker build --tag dbmi/4ce-analysis:release-0.2 .
+```
