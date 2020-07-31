@@ -33,4 +33,7 @@ RUN usermod -L dockeruser
 RUN chage -E0 dockeruser
 RUN usermod -s /sbin/nologin dockeruser
 
+# Copy RStudio Config
+COPY rserver.conf /etc/rstudio/rserver.conf
+
 CMD ["/startup/startup.sh"]
