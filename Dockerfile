@@ -12,7 +12,6 @@ RUN R -e "install.packages('metafor')"
 RUN R -e "install.packages('rtf')"
 RUN R -e "install.packages('splines')"
 
-
 ## install RStudio Server / notebooks
 RUN mkdir /opt/rstudioserver
 WORKDIR /opt/rstudioserver
@@ -28,5 +27,13 @@ RUN chmod 700 /startup/startup.sh
 
 RUN mkdir /c19i2b2
 WORKDIR /c19i2b2
+
+## Lock the default user from analysis docker
+RUN usermod -L dockeruser
+RUN chage -E0 dockeruser
+RUN usermod -s /sbin/nologin dockeruser
+
+# Copy RStudio Config
+COPY rserver.conf /etc/rstudio/rserver.conf
 
 CMD ["/startup/startup.sh"]
