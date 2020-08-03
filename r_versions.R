@@ -1,0 +1,1 @@
+installed.packages()[,c(1,3:4)]
