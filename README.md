@@ -14,13 +14,30 @@ As is the spirit of Docker nothing will be saved on the container itself! If you
 
 # Starting Container
 
-To run this docker container issue the following command in your terminal. /SOME_LOCAL_PATH should be replaced by the path you wish to save any R Scripts or generated data.
+To run this docker container issue the following command in your terminal. 
 
 ```bash
-docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 -p 8787:8787 -p 2200:22 -d dbmi/4ce-analysis:latest
+docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 \
+                            -p 8787:8787 \
+                            -p 2200:22 \
+                            -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
+                            -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
+                            dbmi/4ce-analysis:development
 ```
 
-This will run the container in the background. If you need to stop the container you can issue the following docker command.
+## Parameters
+
+### /SOME_LOCAL_PATH
+
+/SOME_LOCAL_PATH should be replaced by the local path you wish to save any R Scripts or generated data. When on the running container this folder will be located at /c19i2b2.
+
+### CONTAINER_USER_USERNAME and CONTAINER_USER_PASSWORD
+
+This is a username and password combo that will get created on the machine and can be used to log into the R Studio Server Web UI.
+
+## Stopping and checking container status
+
+If you need to stop the container you can issue the following docker command.
 
 ```bash
 docker kill 4ce
@@ -38,9 +55,17 @@ Running this container with the default command starts an SSH Server as well as 
 
 ## Connecting to RStudio Server via localhost
 
-If you are running this on your own machine you can use http://localhost:8787 to access R Studio Server. The default username and password you can use is dockeruser/dockerpassword. 
+If you are running this on your own machine you can use http://localhost:8787 to access R Studio Server. You will use the username and password you used in the above 'docker run' command.
 
-## Connecting to RStudio Server via IP Address of container
+## Connecting to RStudio Server hosted on a remote server
+
+IMPORTANT! Additional security measures need to be in place if you are deploying this to a widely accessible server. See the R Studio Server pages for ideas on increasing security. Do not run this container somewhere that is accesible from the outside world without first locking down access. You may want to consider
+
+* Restricting which users can SSH via Ubuntu
+* Restricting network access
+* Ensuring encrypted R Studio Server traffic
+
+https://docs.rstudio.com/ide/server-pro/access-and-security.html
 
 If you have deployed this container to another server then you'll use the IP address of that server. This requires that the ports to the remote server are open and that the running container can receive traffic on those ports.
 
@@ -70,4 +95,18 @@ If you ever need to restart rstudio server inside the container
 
 ```bash
 /usr/sbin/rstudio-server restart
+```
+
+# Developer Information
+
+If you want to build your own copy of this container you can use
+
+```bash
+docker build .
+```
+
+You can optionally specify a tag when building to reference later.
+
+```bash
+docker build --tag dbmi/4ce-analysis:release-0.2 .
 ```
