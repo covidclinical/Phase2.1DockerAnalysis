@@ -22,7 +22,7 @@ docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 \
                             -p 2200:22 \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
                             -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
-                            dbmi/4ce-analysis:development
+                            dbmi/4ce-analysis:latest
 ```
 
 ## Parameters
