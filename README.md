@@ -17,7 +17,7 @@ As is the spirit of Docker nothing will be saved on the container itself! If you
 To run this docker container issue the following command in your terminal. 
 
 ```bash
-docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/4ceData \
+docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
                             -p 8787:8787 \
                             -p 2200:22 \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
