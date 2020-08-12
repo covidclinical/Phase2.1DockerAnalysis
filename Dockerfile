@@ -31,8 +31,8 @@ RUN mkdir /startup
 COPY startup.sh /startup/startup.sh
 RUN chmod 700 /startup/startup.sh
 
-RUN mkdir /c19i2b2
-WORKDIR /c19i2b2
+RUN mkdir /4ceData
+WORKDIR /4ceData
 
 ## Lock the default user from analysis docker
 RUN usermod -L dockeruser
