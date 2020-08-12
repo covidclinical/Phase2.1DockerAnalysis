@@ -11,22 +11,28 @@ RUN R -e "install.packages('lme4')"
 RUN R -e "install.packages('metafor')"
 RUN R -e "install.packages('rtf')"
 RUN R -e "install.packages('splines')"
+RUN R -e "install.packages('tidyr')"
+RUN R -e "install.packages('stringr')"
+RUN R -e "install.packages('survival')"
 
 ## install RStudio Server / notebooks
 RUN mkdir /opt/rstudioserver
 WORKDIR /opt/rstudioserver
 
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.3_amd64.deb
+RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.3_amd64.deb
+
 RUN apt-get update && apt-get install -y gdebi-core
-RUN wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1056-amd64.deb
-RUN gdebi -n rstudio-server-1.3.1056-amd64.deb
+RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5042-amd64.deb
+RUN gdebi -n rstudio-server-1.2.5042-amd64.deb
 
 ## Copy startup script.
 RUN mkdir /startup
 COPY startup.sh /startup/startup.sh
 RUN chmod 700 /startup/startup.sh
 
-RUN mkdir /c19i2b2
-WORKDIR /c19i2b2
+RUN mkdir /4ceData
+WORKDIR /4ceData
 
 ## Lock the default user from analysis docker
 RUN usermod -L dockeruser

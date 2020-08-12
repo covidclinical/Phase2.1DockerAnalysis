@@ -17,7 +17,7 @@ As is the spirit of Docker nothing will be saved on the container itself! If you
 To run this docker container issue the following command in your terminal. 
 
 ```bash
-docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 \
+docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/4ceData \
                             -p 8787:8787 \
                             -p 2200:22 \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
@@ -29,7 +29,7 @@ docker run --rm --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 \
 
 ### /SOME_LOCAL_PATH
 
-/SOME_LOCAL_PATH should be replaced by the local path you wish to save any R Scripts or generated data. When on the running container this folder will be located at /c19i2b2.
+/SOME_LOCAL_PATH should be replaced by the local path you wish to save any R Scripts or generated data. When on the running container this folder will be located at /4ceData.
 
 ### CONTAINER_USER_USERNAME and CONTAINER_USER_PASSWORD
 
@@ -84,7 +84,7 @@ From here you can run an R command line session.
 One final option for the container is if you want to simply run it like an interactive R session. The container will exit after you close your R session. Note, this command starts the container so you can't already have one running when issuing it. The --rm flag will ensure that when this container exits the container is stopped and cleaned up.
 
 ```bash
-docker run --name 4ce -v /SOME_LOCAL_PATH:/c19i2b2 --rm -it dbmi/4ce-analysis:latest R
+docker run --name 4ce -v /SOME_LOCAL_PATH:/4ceData --rm -it dbmi/4ce-analysis:latest R
 ```
 
 # Other Information
@@ -108,5 +108,5 @@ docker build .
 You can optionally specify a tag when building to reference later.
 
 ```bash
-docker build --tag dbmi/4ce-analysis:release-0.2 .
+docker build --tag dbmi/4ce-analysis:development .
 ```
