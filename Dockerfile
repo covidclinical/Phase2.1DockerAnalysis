@@ -11,6 +11,9 @@ RUN R -e "install.packages('lme4')"
 RUN R -e "install.packages('metafor')"
 RUN R -e "install.packages('rtf')"
 RUN R -e "install.packages('splines')"
+RUN R -e "install.packages('tidyr')"
+RUN R -e "install.packages('stringr')"
+RUN R -e "install.packages('survival')"
 
 ## install RStudio Server / notebooks
 RUN mkdir /opt/rstudioserver

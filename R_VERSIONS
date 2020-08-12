@@ -172,7 +172,7 @@ stats         "stats"         "3.5.3"      "base"
 stats4        "stats4"        "3.5.3"      "base"       
 stringi       "stringi"       "1.4.3"      NA           
 stringr       "stringr"       "1.4.0"      NA           
-survival      "survival"      "2.43-3"     "recommended"
+survival      "survival"      "2.44-1.1"   "recommended"
 sys           "sys"           "3.1"        NA           
 tcltk         "tcltk"         "3.5.3"      "base"       
 tibble        "tibble"        "2.1.1"      NA           
@@ -197,4 +197,4 @@ yaml          "yaml"          "2.2.0"      NA
 > 
 > proc.time()
    user  system elapsed 
-  0.243   0.064   0.544 
+  0.218   0.098   0.599 
