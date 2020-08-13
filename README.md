@@ -67,7 +67,7 @@ IMPORTANT! Additional security measures need to be in place if you are deploying
 
 https://docs.rstudio.com/ide/server-pro/access-and-security.html
 
-If you have deployed this container to another server then you'll use the IP address of that server. This requires that the ports to the remote server are open and that the running container can receive traffic on those ports.
+If you have deployed this container to another server then you'll use the IP address of that server. This requires that the ports to the remote server are open and that the running container can receive traffic on those ports. The Docker host’s firewall, and any relevant network firewalls, need to be configured to allow inbound TCP access to port 22 and 8787 on the Docker host. Access can be limited to only TCP port 22 if ssh port mapping is used on the client side (see documentation on DockerHub).
 
 ## Connecting to the container via SSH (localhost)
 
