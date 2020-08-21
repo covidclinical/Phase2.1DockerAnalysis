@@ -4,9 +4,19 @@ This docker is built to run a canned set of analyses for the 4CE Project.
 
 # Prerequisites
 
+## Docker
+
 In order to run this container you need to have Docker installed.
 
 See - https://docs.docker.com/get-docker/
+
+## SSH Client
+
+If you are using SSH to connect to a Docker or to enable port forwarding you'll need an SSH client. 
+
+For MacOS and Linux you can use the SSH client already installed.
+
+For Windows systems you will need to download an SSH client likey PuTTY (https://www.putty.org/).
 
 # IMPORTANT!
 
@@ -67,7 +77,18 @@ IMPORTANT! Additional security measures need to be in place if you are deploying
 
 https://docs.rstudio.com/ide/server-pro/access-and-security.html
 
-If you have deployed this container to another server then you'll use the IP address of that server. This requires that the ports to the remote server are open and that the running container can receive traffic on those ports.
+The Docker host’s firewall, and any relevant network firewalls, need to be configured to allow inbound TCP access to port 22 and 8787 on the Docker host. Access can be limited to only TCP port 22 if ssh port mapping is used on the client side (see documentation on DockerHub).
+
+### Remote server with only port 22 access
+
+Access to the remote server from clients may also be restricted to port 22 only. The client will need to forward a local port to port 8787 on the remote in order to connect to the RStudio Server. An example using the native MacOS SSH client
+
+```bash
+ssh -L 8787:SOME.REMOTE.HOST:8787 USERNAME@SOME.REMOTE.HOST
+```
+
+If succesful, the client should be able to visit http://localhost:8787 to see RStudio Server.
+
 
 ## Connecting to the container via SSH (localhost)
 
