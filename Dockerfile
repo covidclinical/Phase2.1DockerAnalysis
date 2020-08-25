@@ -23,10 +23,8 @@ RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0
 RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.3_amd64.deb
 
 RUN apt-get update && apt-get install -y gdebi-core
-RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5042-amd64.deb
+RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.3.1073-amd64.deb
 RUN gdebi -n rstudio-server-1.2.5042-amd64.deb
-
-RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
 
 ## Copy startup script.
 RUN mkdir /startup
@@ -46,5 +44,8 @@ COPY rserver.conf /etc/rstudio/rserver.conf
 
 ## install R package with utility functions for Phase 2 projects
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2UtilitiesRPackage', subdir='FourCePhase2Utilities', upgrade=FALSE)"
+
+## allow anyone to write system R libraries
+RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
 
 CMD ["/startup/startup.sh"]
