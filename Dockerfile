@@ -29,6 +29,8 @@ RUN gdebi -n rstudio-server-1.2.5042-amd64.deb
 ## install R package with utility functions for Phase 2 projects
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2UtilitiesRPackage', subdir='FourCePhase2Utilities', upgrade=FALSE)"
 
+RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
+
 ## Copy startup script.
 RUN mkdir /startup
 COPY startup.sh /startup/startup.sh
