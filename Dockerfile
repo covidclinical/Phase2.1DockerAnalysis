@@ -1,4 +1,4 @@
-FROM dbmi/hds-analysis-docker:0.2
+FROM dbmi/hds-analysis-docker:1.0.1
 
 ## customization for 4CE Phase 2.0
 RUN R -e "install.packages('data.table')"
@@ -25,6 +25,9 @@ RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.3_amd64.deb
 RUN apt-get update && apt-get install -y gdebi-core
 RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5042-amd64.deb
 RUN gdebi -n rstudio-server-1.2.5042-amd64.deb
+
+## install R package with utility functions for Phase 2 projects
+RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2UtilitiesRPackage', subdir='FourCePhase2Utilities', upgrade=FALSE)"
 
 ## Copy startup script.
 RUN mkdir /startup

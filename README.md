@@ -1,6 +1,6 @@
 # 4CE Project
 
-This docker is built to run a canned set of analyses for the 4CE Project.
+Use this docker to run Phase 2 analyses for the 4CE Project.
 
 # Prerequisites
 
