@@ -1,4 +1,4 @@
-FROM dbmi/hds-analysis-docker:1.0.2
+FROM dbmi/hds-analysis-docker:version-1.0.2
 
 ## customization for 4CE Phase 2.0
 RUN R -e "install.packages('data.table')"
