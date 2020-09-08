@@ -131,3 +131,99 @@ You can optionally specify a tag when building to reference later.
 ```bash
 docker build --tag dbmi/4ce-analysis:development .
 ```
+
+
+# Offline Usage
+
+There are multiple ways to incorporate external changes into a docker image if you need to limit the image from reaching out to the internet. In all cases you'll build an image on an internet connected machine and then transfer an image file over to your target machine.
+
+## Building the image on an internet connected machine
+
+### With your own Dockerfile
+
+You can create your own Dockerfile and use the 4ce Docker as a base. You'll add to this Dockerfile any additional changes you want to your docker.
+
+As an example, if you wanted to install an additional R Package.
+
+```dockerfile
+# This is a new Dockerfile, you can name it Dockerfile.offline
+FROM dbmi/4ce-analysis:version-1.0.8
+
+RUN R -e "R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)""
+```
+
+After this you can build your image.
+
+```bash
+docker build -f Dockerfile.offline -t 4ce_offline:updated .
+```
+
+### Saving an existing container
+
+Another option available in docker is to run a container, make modifications to it such as installing packages, and then saving that container to a new image.
+
+First, pull the most recent code for the analysis environment from GitHub.
+
+```bash
+git clone https://github.com/covidclinical/Phase2.0_Docker_Analysis
+```
+
+Second, Build and run the container.
+
+```bash
+cd Phase2.0_Docker_Analysis
+docker build -t 4ce_offline .
+docker run -it 4ce_offline bash
+```
+
+At the command prompt, install any packages you want to be used when the container is run on the remote machine.
+
+```bash
+R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)"
+```
+
+In another terminal window you'll need to show the docker process to get the container ID.
+
+```bash
+docker ps
+```
+
+```bash
+docker commit <CONTAINER_ID> 4ce_offline:updated
+```
+
+You should now see this image listed if you run
+
+```bash
+docker images | grep 4ce_offline
+```
+
+## Saving the image as a file
+
+Whatever method you use to generate your image, the final step is to save that image as a .tar file to be transferred.
+
+```bash
+docker save 4ce_offline:updated > ./4ce_offline.tar
+```
+
+After this you'll transfer the file over to the non-internet connected system.
+
+## Running the saved image file
+
+After the .tar file is transferred you can load the image into Docker with the following command.
+
+```bash
+docker load < 4ce_offline.tar
+```
+
+Now you can run the container as indicated in the 'Starting Container' instructions above. You will need to replace the name of the container with whatever name you gave the image you used above.
+
+```bash
+docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
+                            -p 8787:8787 \
+                            -p 2200:22 \
+                            -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
+                            -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
+                            4ce_offline:updated
+```
+
