@@ -149,7 +149,7 @@ As an example, if you wanted to install an additional R Package.
 # This is a new Dockerfile, you can name it Dockerfile.offline
 FROM dbmi/4ce-analysis:version-1.0.8
 
-RUN R -e "R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)""
+RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)"
 ```
 
 After this you can build your image.
