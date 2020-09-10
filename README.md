@@ -1,6 +1,18 @@
+
+
 # 4CE Project
 
 Use this docker to run Phase 2 analyses for the 4CE Project.
+
+# Table of Contents
+
+1. [Prerequisites](#Prerequisites)
+2. [IMPORTANT!](#IMPORTANT!)
+3. [Starting Container](#Starting-Container)
+4. [Connecting](#Connecting)
+5. [Other Information](#Other-Information)
+6. [Developer Information](#Developer-Information)
+7. [Offline Usage](#Offline-Usage)
 
 # Prerequisites
 
@@ -135,7 +147,7 @@ docker build --tag dbmi/4ce-analysis:development .
 
 # Offline Usage
 
-There are multiple ways to incorporate external changes into a docker image if you need to limit the image from reaching out to the internet. In all cases you'll build an image on an internet connected machine and then transfer an image file over to your target machine.
+There are multiple ways to incorporate external changes into a docker image if you need to limit the container from reaching out to the internet. In all cases you'll build an image on an internet connected machine and then transfer an image file over to your target machine.
 
 ## Building the image on an internet connected machine
 
@@ -182,7 +194,7 @@ At the command prompt, install any packages you want to be used when the contain
 R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)"
 ```
 
-In another terminal window you'll need to show the docker process to get the container ID.
+In another terminal window you'll need to list the running docker processes to get the container ID.
 
 ```bash
 docker ps
