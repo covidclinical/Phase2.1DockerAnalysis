@@ -177,13 +177,13 @@ Another option available in docker is to run a container, make modifications to 
 First, pull the most recent code for the analysis environment from GitHub.
 
 ```bash
-git clone https://github.com/covidclinical/Phase2.0_Docker_Analysis
+git clone https://github.com/covidclinical/Phase2.1_Docker_Analysis
 ```
 
 Second, Build and run the container.
 
 ```bash
-cd Phase2.0_Docker_Analysis
+cd Phase2.1_Docker_Analysis
 docker build -t 4ce_offline .
 docker run -it 4ce_offline bash
 ```
