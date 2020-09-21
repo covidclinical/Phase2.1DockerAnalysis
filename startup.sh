@@ -12,7 +12,8 @@ else
 	&& chown ${CONTAINER_USER_USERNAME}:${CONTAINER_USER_USERNAME} /4ceData \
 	&& addgroup ${CONTAINER_USER_USERNAME} staff \
 	&& echo "$CONTAINER_USER_USERNAME:$CONTAINER_USER_PASSWORD" | chpasswd \
-	&& adduser ${CONTAINER_USER_USERNAME} sudo
+	&& adduser ${CONTAINER_USER_USERNAME} sudo \
+	&& chsh -s /bin/bash ${CONTAINER_USER_USERNAME}
 
     usermod -a -G rstudio-users $CONTAINER_USER_USERNAME
 fi
