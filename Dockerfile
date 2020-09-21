@@ -43,7 +43,7 @@ RUN usermod -s /sbin/nologin dockeruser
 COPY rserver.conf /etc/rstudio/rserver.conf
 
 ## install R package with utility functions for Phase 2 projects
-RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2UtilitiesRPackage', subdir='FourCePhase2Utilities', upgrade=FALSE)"
+RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1UtilitiesRPackage', subdir='FourCePhase2.1Utilities', upgrade=FALSE)"
 
 ## allow anyone to write system R libraries
 RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
