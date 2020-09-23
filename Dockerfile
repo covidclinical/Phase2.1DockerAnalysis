@@ -288,4 +288,7 @@ COPY rserver.conf /etc/rstudio/rserver.conf
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1UtilitiesRPackage', subdir='FourCePhase2.1Utilities', upgrade=FALSE)"
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1DataRPackage', subdir='FourCePhase2.1Data', upgrade=FALSE)"
 
+## tell git to use the cache credential helper and set a 1 day-expiration
+git config --system credential.helper 'cache --timeout 86400'
+
 CMD ["/startup/startup.sh"]
