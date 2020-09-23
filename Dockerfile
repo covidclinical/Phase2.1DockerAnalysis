@@ -289,6 +289,6 @@ RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1Uti
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1DataRPackage', subdir='FourCePhase2.1Data', upgrade=FALSE)"
 
 ## tell git to use the cache credential helper and set a 1 day-expiration
-git config --system credential.helper 'cache --timeout 86400'
+RUN git config --system credential.helper 'cache --timeout 86400'
 
 CMD ["/startup/startup.sh"]
