@@ -76,9 +76,6 @@ RUN rm microsoft-r-open-*.tar.gz \
 # Use libcurl for download, otherwise problems with tar files
 RUN echo 'options("download.file.method" = "libcurl")' >> /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc/Rprofile.site
 
-## allow anyone to write system R libraries
-RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
-
 ## install unixodbc
 RUN apt-get update && apt-get install -y \
 	unixodbc \
@@ -290,5 +287,10 @@ RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1Dat
 
 ## tell git to use the cache credential helper and set a 1 day-expiration
 RUN git config --system credential.helper 'cache --timeout 86400'
+
+## allow anyone to write system R libraries
+## IMPORTANT: this needs to happen after all of the R libraries are installed, otherwise
+## some files may remain un-writable on subsequent installs
+RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
 
 CMD ["/startup/startup.sh"]
