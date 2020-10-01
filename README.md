@@ -157,107 +157,26 @@ Many sites will have security controls in place that prevent a host that has acc
 
 Under this arrangement, the container image will be pulled from the Docker Hub registry onto the bastion host (which itself needs to have the Docker runtime installed).  The container can then be run on the bastion host if any additional configuration requires internet access (e.g., installation of additional packages), and saved as a new Docker image.  The image (whether the original one from the registry or an updated one) will then be saved to a `.tar` file, which can be transferred (e.g. via scp) to the isolated host.  The image is then run on the isolated host as usual, with access to the required input data. The analysis packages are designed by default to save their results to a scratch file system location that is local to the contianer. Thus, the analyses can be run on the isolated host, the modified container (including the result files) can be saved as a new image, the image transferred back to the bastion host, and the result files uploaded.  
 
-To summarize, the steps are are follows:
+In more detail, the steps are are follows:
 
-1. *On the bastion host:* Pull the container image from the registry
-2. *On the bastion host:* Optionally run the container, perform any desired customization, and save to a new image
-3. *On the bastion host:* Transfer the image to the isolated host as a `.tar` file
-4. *On the isolated host:* Load the `.tar` file as an image in Docker
-5. *On the isolated host:* Run the container
-6. *On the isolated host:* Execute the desired analyses, saving results to the container's local file system
-7. *On the isolated host:* Save the running container (with result files) as a new image
-8. *On the isolated host:* Transfer that new image as a `.tar` file back to the bastion host
-9. *On the bastion host:* Load the `.tar` file as an image in Docker
-10. *On the bastion host:* Run the container
-11. *On the bastion host:* Upload the result files to GitHub
+## 1. *On the bastion host:* Pull the container image from the registry
 
-## Building the image on an internet connected machine
+## 2. *On the bastion host:* Optionally run the container, perform any desired customization, and save to a new image
 
-### With your own Dockerfile
+## 3. *On the bastion host:* Transfer the image to the isolated host as a `.tar` file
 
-You can create your own Dockerfile and use the 4ce Docker as a base. You'll add to this Dockerfile any additional changes you want to your docker.
+## 4. *On the isolated host:* Load the `.tar` file as an image in Docker
 
-As an example, if you wanted to install an additional R Package.
+## 5. *On the isolated host:* Run the container
 
-```dockerfile
-# This is a new Dockerfile, you can name it Dockerfile.offline
-FROM dbmi/4ce-analysis:version-1.0.8
+## 6. *On the isolated host:* Execute the desired analyses, saving results to the container's local file system
 
-RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)"
-```
+## 7. *On the isolated host:* Save the running container (with result files) as a new image
 
-After this you can build your image.
+## 8. *On the isolated host:* Transfer that new image as a `.tar` file back to the bastion host
 
-```bash
-docker build -f Dockerfile.offline -t 4ce_offline:updated .
-```
+## 9. *On the bastion host:* Load the `.tar` file as an image in Docker
 
-### Saving an existing container
+## 10. *On the bastion host:* Run the container
 
-Another option available in docker is to run a container, make modifications to it such as installing packages, and then saving that container to a new image.
-
-First, pull the most recent code for the analysis environment from GitHub.
-
-```bash
-git clone https://github.com/covidclinical/Phase2.1DockerAnalysis
-```
-
-Second, Build and run the container.
-
-```bash
-cd Phase2.1DockerAnalysis
-docker build -t 4ce_offline .
-docker run -it 4ce_offline bash
-```
-
-At the command prompt, install any packages you want to be used when the container is run on the remote machine.
-
-```bash
-R -e "devtools::install_github('https://github.com/covidclinical/Phase2SurvivalRPackage', subdir='FourCePhase2Survival', upgrade=FALSE)"
-```
-
-In another terminal window you'll need to list the running docker processes to get the container ID.
-
-```bash
-docker ps
-```
-
-```bash
-docker commit <CONTAINER_ID> 4ce_offline:updated
-```
-
-You should now see this image listed if you run
-
-```bash
-docker images | grep 4ce_offline
-```
-
-## Saving the image as a file
-
-Whatever method you use to generate your image, the final step is to save that image as a .tar file to be transferred.
-
-```bash
-docker save 4ce_offline:updated > ./4ce_offline.tar
-```
-
-After this you'll transfer the file over to the non-internet connected system.
-
-## Running the saved image file
-
-After the .tar file is transferred you can load the image into Docker with the following command.
-
-```bash
-docker load < 4ce_offline.tar
-```
-
-Now you can run the container as indicated in the 'Starting Container' instructions above. You will need to replace the name of the container with whatever name you gave the image you used above.
-
-```bash
-docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
-                            -p 8787:8787 \
-                            -p 2200:22 \
-                            -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
-                            -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
-                            4ce_offline:updated
-```
-
+## 11. *On the bastion host:* Upload the result files to GitHub
