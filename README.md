@@ -159,17 +159,17 @@ Under this arrangement, the container image will be pulled from the Docker Hub r
 
 To summarize, the steps are are follows:
 
-1. On the bastion host: Pull the container image from the registry
-2. On the bastion host: Optionally run the container, perform any desired customization, and save to a new image
-3. On the bastion host: Transfer the image to the isolated host as a `.tar` file
-4. On the isolated host: Load the `.tar` file as an image in Docker
-5. On the isolated host: Run the container
-6. On the isolated host: Execute the desired analyses, saving results to the container's local file system
-7. On the isolated host: Save the running container (with result files) as a new image
-8. On the isolated host: Transfer that new image as a `.tar` file back to the bastion host
-9. On the bastion host: Load the `.tar` file as an image in Docker
-10. On the bastion host: Run the container
-11. On the bastion host: Upload the result files to GitHub
+1. *On the bastion host:* Pull the container image from the registry
+2. *On the bastion host:* Optionally run the container, perform any desired customization, and save to a new image
+3. *On the bastion host:* Transfer the image to the isolated host as a `.tar` file
+4. *On the isolated host:* Load the `.tar` file as an image in Docker
+5. *On the isolated host:* Run the container
+6. *On the isolated host:* Execute the desired analyses, saving results to the container's local file system
+7. *On the isolated host:* Save the running container (with result files) as a new image
+8. *On the isolated host:* Transfer that new image as a `.tar` file back to the bastion host
+9. *On the bastion host:* Load the `.tar` file as an image in Docker
+10. *On the bastion host:* Run the container
+11. *On the bastion host:* Upload the result files to GitHub
 
 ## Building the image on an internet connected machine
 
