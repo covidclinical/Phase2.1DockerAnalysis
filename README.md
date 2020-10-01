@@ -226,7 +226,7 @@ docker ps
 Then create a new image:
 
 ```bash
-docker commit <CONTAINER_ID> 4ce_offline:updated
+docker commit <CONTAINER_ID> 4ce_offline:with_results
 ```
 
 You can stop the container after the above command completes.
@@ -234,14 +234,14 @@ You can stop the container after the above command completes.
 ### 8. On the *isolated* host: Transfer that new image as a .tar file back to the bastion host
 
 ```bash
-docker save 4ce_offline:with_results > ./4ce_with_results.tar
+docker save 4ce_offline:with_results > ./4ce_offline_with_results.tar
 ```
-Now transfer `4ce_with_results.tar` to the isolated host using, e.g., scp or ftp.
+Now transfer `4ce_offline_with_results.tar` to the isolated host using, e.g., scp or ftp.
 
 ### 9. On the *bastion* host: Load the .tar file as an image in Docker
 
 ```bash
-docker load < 4ce_with_results.tar
+docker load < 4ce_offline_with_results.tar
 ```
 
 ### 10. On the *bastion* host: Run the container
