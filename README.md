@@ -191,14 +191,14 @@ You can now stop the continer.
 Save the image as a `.tar` file:
 
 ```bash
-docker save 4ce_offline:updated > ./4ce_offline.tar
+docker save 4ce_offline:updated > ./4ce_offline_updated.tar
 ```
 
-Now transfer `4ce_offline.tar` to the isolated host using, e.g., scp or ftp.
+Now transfer `4ce_offline_updated.tar` to the isolated host using, e.g., scp or ftp.
 
 ### 4. On the *isolated* host: Load the .tar file as an image in Docker
 ```bash
-docker load < 4ce_offline.tar
+docker load < 4ce_offline_updated.tar
 ```
 
 ### 5. On the *isolated* host: Run the container
