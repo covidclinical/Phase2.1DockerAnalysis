@@ -160,23 +160,101 @@ Under this arrangement, the container image will be pulled from the Docker Hub r
 In more detail, the steps are are follows:
 
 ### 1. On the *bastion* host: Pull the container image from the registry
+```bash
+docker image rm dbmi/4ce-analysis:latest
+docker pull dbmi/4ce-analysis
+```
 
 ### 2. On the *bastion* host: Optionally run the container, perform any desired customization, and save to a new image
+See [Starting Container](#Starting-Container) above for information on running the container.  See [Connecting](#Connecting) above for information on connecting to a running container.  Once your modifications (package installations, etc.) are complete, leave the container running and, in a separate shell, first get the container id of the running container:
 
-### 3. On the *bastion* host: Transfer the image to the isolated host as a `.tar` file
+```bash
+docker ps
+```
 
-### 4. On the *isolated* host: Load the `.tar` file as an image in Docker
+Then create a new image:
+
+```bash
+docker commit <CONTAINER_ID> 4ce_offline:updated
+```
+
+You should now see this image listed if you run
+
+```bash
+docker images | grep 4ce_offline
+```
+
+You can now stop the continer.
+
+### 3. On the *bastion* host: Transfer the image to the isolated host as a .tar file
+
+Save the image as a `.tar` file:
+
+```bash
+docker save 4ce_offline:updated > ./4ce_offline.tar
+```
+
+Now transfer `4ce_offline.tar` to the isolated host using, e.g., scp or ftp.
+
+### 4. On the *isolated* host: Load the .tar file as an image in Docker
+```bash
+docker load < 4ce_offline.tar
+```
 
 ### 5. On the *isolated* host: Run the container
+Now you can run the container as indicated above. You will need to replace the name of the image with the name you used above.
+
+```bash
+docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
+                            -p 8787:8787 \
+                            -p 2200:22 \
+                            -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
+                            -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
+                            4ce_offline:updated
+```
 
 ### 6. On the *isolated* host: Execute the desired analyses, saving results to the container's local file system
+See [Connecting](#Connecting) above for information on connecting to a running container.  Each of the 4CE Phase 2 projects are implemented from the same template code, so should only require running `PackageName::runAnalysis()` and `PackageName::validateAnalysis()`, where `PackageName` is the name of the analysis package you would like to run.  By default, these packages save their output to the container's local file system.
 
 ### 7. On the *isolated* host: Save the running container (with result files) as a new image
+Get the container id of the running container:
 
-### 8. On the *isolated* host: Transfer that new image as a `.tar` file back to the bastion host
+```bash
+docker ps
+```
 
-### 9. On the *bastion* host: Load the `.tar` file as an image in Docker
+Then create a new image:
+
+```bash
+docker commit <CONTAINER_ID> 4ce_offline:updated
+```
+
+You can stop the container after the above command completes.
+
+### 8. On the *isolated* host: Transfer that new image as a .tar file back to the bastion host
+
+```bash
+docker save 4ce_offline:with_results > ./4ce_with_results.tar
+```
+Now transfer `4ce_with_results.tar` to the isolated host using, e.g., scp or ftp.
+
+### 9. On the *bastion* host: Load the .tar file as an image in Docker
+
+```bash
+docker load < 4ce_with_results.tar
+```
 
 ### 10. On the *bastion* host: Run the container
+Now you can run the container as indicated above. You will need to replace the name of the image with the name you used above.
+
+```bash
+docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
+                            -p 8787:8787 \
+                            -p 2200:22 \
+                            -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
+                            -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
+                            4ce_offline:with_results
+```
 
 ### 11. On the *bastion* host: Upload the result files to GitHub
+See [Connecting](#Connecting) above for information on connecting to a running container.  You can now run `PackageName::submitAnalysis()` for each of the projects to upload their results to GitHub.
