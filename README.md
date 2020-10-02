@@ -165,8 +165,8 @@ docker image rm dbmi/4ce-analysis:latest
 docker pull dbmi/4ce-analysis
 ```
 
-### 2. On the *bastion* host: Optionally run the container, perform any desired customization, and save to a new image
-See [Starting Container](#Starting-Container) above for information on running the container.  See [Connecting](#Connecting) above for information on connecting to a running container.  Once your modifications (package installations, etc.) are complete, leave the container running and, in a separate shell, first get the container id of the running container:
+### 2. On the *bastion* host: Run the container, perform any desired customization, and save to a new image
+See [Starting Container](#Starting-Container) above for information on running the container.  See [Connecting](#Connecting) above for information on connecting to a running container.  Once your modifications (package installations, updates, etc.) are complete, leave the container running and, in a separate shell, first get the container id of the running container:
 
 ```bash
 docker ps
