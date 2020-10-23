@@ -80,7 +80,7 @@ The ``-p`` flag to Docker maps a TCP port in the container to a TCP port on the 
 ### Image Name and Tag (Version)
 
 The final line of the Docker command above: ``dbmi/4ce-analysis:version-1.0.10`` specifies the image name and tag that will be run.
-The image name is ``dbmi/4ce-analysis`` and the tag is the string following the colon, e.g. ``version-1.0.10``.  
+The image name is ``dbmi/4ce-analysis`` and the tag is the string following the colon, e.g. ``version-1.0.10``. 
 We will use tags to track the version of the container that each site is running locally.
 We will attempt to keep this documentation up-to-date with instructions for running the latest release version, but you can 
 always refer to the container's registry page https://hub.docker.com/repository/docker/dbmi/4ce-analysis/tags?page=1 for 
