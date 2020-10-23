@@ -29,30 +29,7 @@ Please make sure that the host where you will run the container has access to th
 
 Once you have the Docker runtime installed, you can pull and run the container image from the DockerHub Registry with a small set of simple command line instructions.
 
-First, to ensure you are running the latest image that we have built and pushed to DockerHub, issue this before running the container to remove any existing versions:
-
-```bash
-docker image rm dbmi/4ce-analysis:latest
-```
-
-If you had pulled a previous version of the image, you will see output such as:
-
-```
-Untagged: dbmi/4ce-analysis:latest
-Untagged: dbmi/4ce-analysis@sha256:bf51ea86dd5f67860a780b4d8cf494f4616b85fbf94dea300200cede52dd9f58
-Deleted: sha256:b95a8b0fe13413428e81f7a64b9c7a0554f55bfa17935c3d47edb3d102a79523
-...
-```
-
-including a possibly long sequence of ``Deleted sha256:`` messages, informing you that the image layers that comprised the previous ``latest`` tag of the image have been deleted.  
-
-If you had not previously pulled the image, you will see the following output, informing you that there was nothing to do:
-
-```
-Error: No such image: dbmi/4ce-analysis:latest
-```
-
-Then, to pull the image from DockerHub and run the container:
+To pull the image from DockerHub and run the container:
 
 ```bash
 docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
@@ -61,6 +38,15 @@ docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
                             -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
                             dbmi/4ce-analysis:version-1.0.10
+```
+
+*Previous versions of this documentation suggested running the ``latest`` tag of the image. For reproducibility, we are now asking
+all sites to run an explicitly named tag and keep a record of which version they are using for their analyses.*
+
+To remove any existing versions of the ``latest`` tag:
+
+```bash
+docker image rm dbmi/4ce-analysis:latest
 ```
 
 ## Parameters
@@ -183,7 +169,7 @@ connect to the container.
 A final option is to run the container in a way that directly presents the user with an interactive R session. The container will stop after you quit this R session. Note, this command runs the container so you can't already have one running when issuing it. The --rm flag will ensure that when the R session is quit, the container is stopped and cleaned up.
 
 ```bash
-docker run --name 4ce -v /SOME_LOCAL_PATH:/4ceData --rm -it dbmi/4ce-analysis:latest R
+docker run --name 4ce -v /SOME_LOCAL_PATH:/4ceData --rm -it dbmi/4ce-analysis:version-1.0.10 R
 ```
 
 
@@ -197,7 +183,7 @@ In more detail, the steps are are follows:
 
 ### 1. On the *bastion* host: Pull the container image from the registry
 ```bash
-docker image rm dbmi/4ce-analysis:latest
+docker image rm dbmi/4ce-analysis:version-1.0.10
 docker pull dbmi/4ce-analysis
 ```
 
