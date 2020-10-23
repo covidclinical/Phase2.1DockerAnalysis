@@ -60,7 +60,7 @@ docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
                             -p 2200:22 \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
                             -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
-                            dbmi/4ce-analysis:latest
+                            dbmi/4ce-analysis:version-1.0.10
 ```
 
 ## Parameters
@@ -76,6 +76,15 @@ These are the username and password that will get created on the container, and 
 ### Port Mapping
 
 The ``-p`` flag to Docker maps a TCP port in the container to a TCP port on the Docker host.  More information is available [here](https://docs.docker.com/config/containers/container-networking/).  For example, in the above invocation, we are mapping TCP 8787 in the container to TCP 8787 on the Docker host, and TCP 22 (ssh) in the container to TCP 2200 on the Docker host.  This allows the user to connect to the container by ssh'ing to ``localhost`` on port 2200, or aiming a web browser at port 8787 on ``localhost`` to connect to R Studio Server.  More information is available in [Connecting to the Container](#3.-Connecting-to-the-Container).
+
+### Image Name and Tag (Version)
+
+The final line of the Docker command above: ``dbmi/4ce-analysis:version-1.0.10`` specifies the image name and tag that will be run.
+The image name is ``dbmi/4ce-analysis`` and the tag is the string following the colon, e.g. ``version-1.0.10``.  
+We will use tags to track the version of the container that each site is running locally.
+We will attempt to keep this documentation up-to-date with instructions for running the latest release version, but you can 
+always refer to the container's registry page https://hub.docker.com/repository/docker/dbmi/4ce-analysis/tags?page=1 for 
+the complete list of available container versions.
 
 # 3. Connecting to the Container
 
