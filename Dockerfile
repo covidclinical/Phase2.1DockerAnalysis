@@ -53,16 +53,16 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 ## R version
-ENV MRO_VERSION_MAJOR 3
-ENV MRO_VERSION_MINOR 5
-ENV MRO_VERSION_BUGFIX 3
+ENV MRO_VERSION_MAJOR 4
+ENV MRO_VERSION_MINOR 0
+ENV MRO_VERSION_BUGFIX 2
 ENV MRO_VERSION $MRO_VERSION_MAJOR.$MRO_VERSION_MINOR.$MRO_VERSION_BUGFIX
 ENV R_HOME=/opt/microsoft/ropen/$MRO_VERSION/lib64/R
 
 WORKDIR /tmp
 
-## Donwload and install MRO & MKL, see https://mran.microsoft.com/download https://mran.blob.core.windows.net/install/mro/3.5.0/microsoft-r-open-3.5.0.tar.gz
-RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/$MRO_VERSION/ubuntu/microsoft-r-open-$MRO_VERSION.tar.gz \
+## Donwload and install MRO & MKL
+RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/$MRO_VERSION/Ubuntu/microsoft-r-open-$MRO_VERSION.tar.gz \
 	&& tar -xzf microsoft-r-open-$MRO_VERSION.tar.gz
 RUN tar -xzf microsoft-r-open-$MRO_VERSION.tar.gz
 WORKDIR /tmp/microsoft-r-open
@@ -76,7 +76,9 @@ RUN rm microsoft-r-open-*.tar.gz \
 # Use libcurl for download, otherwise problems with tar files
 RUN echo 'options("download.file.method" = "libcurl")' >> /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc/Rprofile.site
 
-## install unixodbc
+RUN chmod 777 /tmp
+
+# ## install unixodbc
 RUN apt-get update && apt-get install -y \
 	unixodbc \
 	unixodbc-dev
@@ -164,7 +166,7 @@ RUN Rscript -e 'install.packages("Rcpp")'
 RUN Rscript -e 'install.packages("roxygen2")'
 RUN Rscript -e 'install.packages("tidyverse")'
 RUN Rscript -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")'
-RUN Rscript -e 'BiocManager::install(version = "3.8", update=FALSE, ask=FALSE)'
+RUN Rscript -e 'BiocManager::install(version = "3.12", update=FALSE, ask=FALSE)'
 RUN R -e "install.packages('getPass')"
 RUN R -e "install.packages('xlsx')"
 
@@ -217,12 +219,17 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y \
 	zsh
 
-## clone our git repo that has the SQL Server connection helper code for R and install the package
+## there is an issue where the R package thinks that the certificate is in the 4.0.0 directory
+ENV CURL_CA_BUNDLE=/opt/microsoft/ropen/4.0.2/lib64/R/lib/microsoft-r-cacert.pem
+RUN Rscript -e "remove.packages(c('curl','httr'))"
+RUN Rscript -e "install.packages(c('curl', 'httr'))"
+
+# ## clone our git repo that has the SQL Server connection helper code for R and install the package
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/FactToCube.git')"
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/MsSqlTools.git')"
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/SqlTools.git')"
 
-RUN chmod 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
+RUN chmod 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
 
 ## change these to suit 
 ARG user_name=dockeruser
@@ -291,6 +298,6 @@ RUN git config --system credential.helper 'cache --timeout 86400'
 ## allow anyone to write system R libraries
 ## IMPORTANT: this needs to happen after all of the R libraries are installed, otherwise
 ## some files may remain un-writable on subsequent installs
-RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
 
 CMD ["/startup/startup.sh"]
