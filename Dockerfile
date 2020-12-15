@@ -219,7 +219,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y \
 	zsh
 
-## there is an issue where the R package thinks that the certificate is in the 4.0.0 directory
+## there is an issue where the R package thinks that the certificate is in the .../ropen/4.0.0/... directory
 ENV CURL_CA_BUNDLE=/opt/microsoft/ropen/4.0.2/lib64/R/lib/microsoft-r-cacert.pem
 RUN Rscript -e "remove.packages(c('curl','httr'))"
 RUN Rscript -e "install.packages(c('curl', 'httr'))"
