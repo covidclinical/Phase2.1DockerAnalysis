@@ -265,8 +265,8 @@ RUN R -e "install.packages('survival')"
 RUN mkdir /opt/rstudioserver
 WORKDIR /opt/rstudioserver
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.4_amd64.deb
-RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.4_amd64.deb
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.5_amd64.deb
+RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.5_amd64.deb
 
 RUN apt-get update && apt-get install -y gdebi-core
 RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5042-amd64.deb
@@ -294,6 +294,9 @@ RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1Dat
 
 ## tell git to use the cache credential helper and set a 1 day-expiration
 RUN git config --system credential.helper 'cache --timeout 86400'
+
+## need newer version of dplyr
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('dplyr')"
 
 ## allow anyone to write system R libraries
 ## IMPORTANT: this needs to happen after all of the R libraries are installed, otherwise
