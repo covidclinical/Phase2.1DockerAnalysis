@@ -298,9 +298,17 @@ RUN git config --system credential.helper 'cache --timeout 86400'
 ## need newer version of dplyr
 RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('dplyr')"
 
+## additional dependencies 2021-02-01
+RUN R -e "install.packages('np')"
+RUN R -e "install.packages('glmnet')"
+RUN R -e "install.packages('glmpath')"
+RUN R -e "install.packages('lars')"
+RUN R -e "install.packages('zoo')"
+RUN R -e "install.packages('lme4')"
+RUN R -e "install.packages('icd')"
+
 ## allow anyone to write system R libraries
-## IMPORTANT: this needs to happen after all of the R libraries are installed, otherwise
-## some files may remain un-writable on subsequent installs
 RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/doc/html/packages.html
 
 CMD ["/startup/startup.sh"]
