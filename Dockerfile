@@ -300,11 +300,12 @@ RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-
 
 ## additional dependencies 2021-02-01
 RUN R -e "install.packages('np')"
+RUN R -e "install.packages('codetools')"
 RUN R -e "install.packages('glmnet')"
 RUN R -e "install.packages('glmpath')"
 RUN R -e "install.packages('lars')"
 RUN R -e "install.packages('zoo')"
-RUN R -e "install.packages('lme4')"
+RUN R --vanilla -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('lme4')"
 RUN R -e "install.packages('icd')"
 
 ## allow anyone to write system R libraries
