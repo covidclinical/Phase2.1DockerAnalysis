@@ -53,16 +53,16 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 
 ## R version
-ENV MRO_VERSION_MAJOR 3
-ENV MRO_VERSION_MINOR 5
-ENV MRO_VERSION_BUGFIX 3
+ENV MRO_VERSION_MAJOR 4
+ENV MRO_VERSION_MINOR 0
+ENV MRO_VERSION_BUGFIX 2
 ENV MRO_VERSION $MRO_VERSION_MAJOR.$MRO_VERSION_MINOR.$MRO_VERSION_BUGFIX
 ENV R_HOME=/opt/microsoft/ropen/$MRO_VERSION/lib64/R
 
 WORKDIR /tmp
 
-## Donwload and install MRO & MKL, see https://mran.microsoft.com/download https://mran.blob.core.windows.net/install/mro/3.5.0/microsoft-r-open-3.5.0.tar.gz
-RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/$MRO_VERSION/ubuntu/microsoft-r-open-$MRO_VERSION.tar.gz \
+## Donwload and install MRO & MKL
+RUN curl -LO -# https://mran.blob.core.windows.net/install/mro/$MRO_VERSION/Ubuntu/microsoft-r-open-$MRO_VERSION.tar.gz \
 	&& tar -xzf microsoft-r-open-$MRO_VERSION.tar.gz
 RUN tar -xzf microsoft-r-open-$MRO_VERSION.tar.gz
 WORKDIR /tmp/microsoft-r-open
@@ -76,7 +76,9 @@ RUN rm microsoft-r-open-*.tar.gz \
 # Use libcurl for download, otherwise problems with tar files
 RUN echo 'options("download.file.method" = "libcurl")' >> /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc/Rprofile.site
 
-## install unixodbc
+RUN chmod 777 /tmp
+
+# ## install unixodbc
 RUN apt-get update && apt-get install -y \
 	unixodbc \
 	unixodbc-dev
@@ -164,7 +166,7 @@ RUN Rscript -e 'install.packages("Rcpp")'
 RUN Rscript -e 'install.packages("roxygen2")'
 RUN Rscript -e 'install.packages("tidyverse")'
 RUN Rscript -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")'
-RUN Rscript -e 'BiocManager::install(version = "3.8", update=FALSE, ask=FALSE)'
+RUN Rscript -e 'BiocManager::install(version = "3.12", update=FALSE, ask=FALSE)'
 RUN R -e "install.packages('getPass')"
 RUN R -e "install.packages('xlsx')"
 
@@ -173,10 +175,8 @@ RUN apt-get update && apt-get -y install \
     python3-pip
 
 ## install odbc connector for R
-## these versions aren't currently available in the MS repo, but required for "immediate" code execution 
-## instead of prepared statement execution
-RUN Rscript -e 'devtools::install_version("DBI", version = "1.1.0", repos = "http://cran.us.r-project.org")'
-RUN Rscript -e 'devtools::install_version("odbc", version = "1.2.3", repos = "http://cran.us.r-project.org")'
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('DBI')"
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('odbc')"
 
 ## install pyodbc
 RUN pip3 install pyodbc
@@ -217,12 +217,17 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update && apt-get install -y \
 	zsh
 
-## clone our git repo that has the SQL Server connection helper code for R and install the package
+## there is an issue where the R package thinks that the certificate is in the .../ropen/4.0.0/... directory
+ENV CURL_CA_BUNDLE=/opt/microsoft/ropen/4.0.2/lib64/R/lib/microsoft-r-cacert.pem
+RUN Rscript -e "remove.packages(c('curl','httr'))"
+RUN Rscript -e "install.packages(c('curl', 'httr'))"
+
+# ## clone our git repo that has the SQL Server connection helper code for R and install the package
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/FactToCube.git')"
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/MsSqlTools.git')"
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/SqlTools.git')"
 
-RUN chmod 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
+RUN chmod 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
 
 ## change these to suit 
 ARG user_name=dockeruser
@@ -258,8 +263,8 @@ RUN R -e "install.packages('survival')"
 RUN mkdir /opt/rstudioserver
 WORKDIR /opt/rstudioserver
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.4_amd64.deb
-RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.4_amd64.deb
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.5_amd64.deb
+RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.5_amd64.deb
 
 RUN apt-get update && apt-get install -y gdebi-core
 RUN wget https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5042-amd64.deb
@@ -288,9 +293,27 @@ RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1Dat
 ## tell git to use the cache credential helper and set a 1 day-expiration
 RUN git config --system credential.helper 'cache --timeout 86400'
 
+## need newer version of dplyr
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('dplyr')"
+
+## additional dependencies 2021-02-01
+RUN R -e "install.packages('np')"
+RUN R -e "install.packages('codetools')"
+RUN R -e "install.packages('glmnet')"
+RUN R -e "install.packages('glmpath')"
+RUN R -e "install.packages('lars')"
+RUN R -e "install.packages('zoo')"
+RUN R --vanilla -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('lme4')"
+RUN R -e "install.packages('icd')"
+
+## related to https://github.com/r-lib/devtools/issues/2309
+RUN R --vanilla -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('testthat')"
+
+# problems with devtools::install_github aimed at HTTPS connections had problems with libcurl
+RUN echo 'options("download.file.method" = "wget")' >> /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc/Rprofile.site
+
 ## allow anyone to write system R libraries
-## IMPORTANT: this needs to happen after all of the R libraries are installed, otherwise
-## some files may remain un-writable on subsequent installs
-RUN chmod -R 777 /opt/microsoft/ropen/3.5.3/lib64/R/library
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/doc/html/packages.html
 
 CMD ["/startup/startup.sh"]
