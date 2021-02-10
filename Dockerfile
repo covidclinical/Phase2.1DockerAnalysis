@@ -175,10 +175,8 @@ RUN apt-get update && apt-get -y install \
     python3-pip
 
 ## install odbc connector for R
-## these versions aren't currently available in the MS repo, but required for "immediate" code execution 
-## instead of prepared statement execution
-RUN Rscript -e 'devtools::install_version("DBI", version = "1.1.0", repos = "http://cran.us.r-project.org")'
-RUN Rscript -e 'devtools::install_version("odbc", version = "1.2.3", repos = "http://cran.us.r-project.org")'
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('DBI')"
+RUN R -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('odbc')"
 
 ## install pyodbc
 RUN pip3 install pyodbc
@@ -307,6 +305,12 @@ RUN R -e "install.packages('lars')"
 RUN R -e "install.packages('zoo')"
 RUN R --vanilla -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('lme4')"
 RUN R -e "install.packages('icd')"
+
+## related to https://github.com/r-lib/devtools/issues/2309
+RUN R --vanilla -e "options(repos = c(CRAN = 'https://cran.microsoft.com/snapshot/2021-01-29')); install.packages('testthat')"
+
+# problems with devtools::install_github aimed at HTTPS connections had problems with libcurl
+RUN echo 'options("download.file.method" = "wget")' >> /opt/microsoft/ropen/$MRO_VERSION/lib64/R/etc/Rprofile.site
 
 ## allow anyone to write system R libraries
 RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
