@@ -124,7 +124,7 @@ You will need to either manually remove the old host association with the IP add
 The full command would therefore look like:
 
 ```bash
-ssh dockeruser@localhost -p 2200 -Y  -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null
+ssh dockeruser@HOST_ADDRESS -p 2200 -Y  -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null
 ```
 
 ## 2. Connecting to R Studio in a Web Browser
