@@ -1,2 +1,2 @@
-# installed.packages()[,c(1,3:4)]
-installed.packages()[,3, drop=FALSE]
+## print a diff'able record of installed packages and their versions
+cat(paste(installed.packages()[, 1], installed.packages()[, 3]), sep = "\n")
