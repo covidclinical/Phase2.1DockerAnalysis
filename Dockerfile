@@ -1,5 +1,5 @@
 #
-# Data Science Workbench Image
+# 4CE Distributed Computing Container
 #
 
 FROM ubuntu:20.04
@@ -298,6 +298,13 @@ COPY rserver.conf /etc/rstudio/rserver.conf
 
 
 #------------------------------------------------------------------------------
+# Install 4CE software packages
+#------------------------------------------------------------------------------
+RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1UtilitiesRPackage', subdir='FourCePhase2.1Utilities', upgrade=FALSE, ref='v1.1.0')"
+RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1DataRPackage', subdir='FourCePhase2.1Data', upgrade=FALSE, ref='v1.1.0')"
+
+
+#------------------------------------------------------------------------------
 # Final odds and ends
 #------------------------------------------------------------------------------
 
@@ -307,6 +314,6 @@ COPY startup.sh /startup/startup.sh
 RUN chmod 700 /startup/startup.sh
 
 # Create a mount point for host filesystem data
-RUN mkdir /HostData
+RUN mkdir /4ceData
 
 CMD ["/startup/startup.sh"]
