@@ -303,6 +303,9 @@ COPY rserver.conf /etc/rstudio/rserver.conf
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1UtilitiesRPackage', subdir='FourCePhase2.1Utilities', upgrade=FALSE, ref='v1.1.0')"
 RUN R -e "devtools::install_github('https://github.com/covidclinical/Phase2.1DataRPackage', subdir='FourCePhase2.1Data', upgrade=FALSE, ref='v1.1.0')"
 
+# allow modification of these locations so users can install and update R packages
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
+RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/doc/html/packages.html
 
 #------------------------------------------------------------------------------
 # Final odds and ends
