@@ -86,6 +86,8 @@ RUN apt-get update \
 		python3-pip \
 		alien \
 		libaio1 \
+		libgmp-dev \
+		libmpfr-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
 
@@ -252,6 +254,7 @@ RUN Rscript -e "install.packages('icd', repos='https://cran.microsoft.com/snapsh
 # -- vanilla because there is a bug that causes the R intro / preamble text to get pushed into the compiler
 RUN Rscript --vanilla -e "install.packages('lme4', repos='https://cran.microsoft.com/snapshot/2021-01-29')"
 RUN Rscript --vanilla -e "install.packages('survminer', repos='https://cran.microsoft.com/snapshot/2021-01-29')"
+RUN Rscript --vanilla -e "install.packages('CVXR', repos='https://cran.microsoft.com/snapshot/2021-05-20')"
 
 # install R packages for connecting to SQL Server and working with resulting data sets
 RUN Rscript -e "devtools::install_github('https://github.com/nathan-palmer/FactToCube.git')"
