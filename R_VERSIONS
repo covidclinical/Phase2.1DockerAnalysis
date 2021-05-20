@@ -40,6 +40,7 @@ credentials 1.3.0
 crosstalk 1.1.1
 cubature 2.0.4.1
 curl 4.3
+CVXR 1.0-9
 data.table 1.13.6
 datasets 4.0.2
 DBI 1.1.1
@@ -52,6 +53,7 @@ digest 0.6.27
 doParallel 1.0.14
 dplyr 1.0.3
 DT 0.17
+ECOSolveR 0.5.4
 ellipsis 0.3.1
 evaluate 0.14
 exactmeta 1.0-2
@@ -82,6 +84,7 @@ gitcreds 0.1.1
 glmnet 4.1
 glmpath 0.98
 glue 1.4.2
+gmp 0.6-2
 gower 0.2.2
 graphics 4.0.2
 grDevices 4.0.2
@@ -144,6 +147,7 @@ numDeriv 2016.8-1.1
 odbc 1.3.0
 openssl 1.4.3
 openxlsx 4.2.3
+osqp 0.6.0.3
 parallel 4.0.2
 pbkrtest 0.5-0.1
 pillar 1.4.7
@@ -190,6 +194,7 @@ rio 0.5.16
 rJava 0.9-13
 rlang 0.4.10
 rmarkdown 2.6
+Rmpfr 0.8-4
 ROracle 1.3-1
 roxygen2 7.1.1
 rpart 4.1-15
@@ -202,6 +207,7 @@ rversions 2.0.2
 rvest 0.3.6
 sass 0.3.1
 scales 1.1.1
+scs 1.3-2
 selectr 0.4-2
 sessioninfo 1.1.1
 shape 1.4.5
