@@ -131,6 +131,7 @@ memoise 2.0.0
 metafor 2.4-0
 methods 4.0.2
 mgcv 1.8-33
+mice 3.13.0
 MicrosoftR 4.0.2
 mime 0.9
 minqa 1.2.4
@@ -223,6 +224,8 @@ stats 4.0.2
 stats4 4.0.2
 stringi 1.5.3
 stringr 1.4.0
+SurrogateTest 1.2
+survAUC 1.0-5
 survival 3.2-7
 survminer 0.4.8
 survMisc 0.5.5

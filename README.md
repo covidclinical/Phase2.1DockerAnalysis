@@ -37,7 +37,7 @@ docker run --rm --name 4ce -d -v /SOME_LOCAL_PATH:/4ceData \
                             -p 2200:22 \
                             -e CONTAINER_USER_USERNAME=REPLACE_ME_USERNAME \
                             -e CONTAINER_USER_PASSWORD=REPLACE_ME_PASSWORD \
-                            dbmi/4ce-analysis:version-2.2.0
+                            dbmi/4ce-analysis:version-2.3.0
 ```
 
 *Previous versions of this documentation suggested running the ``latest`` tag of the image. For reproducibility, we are now asking
@@ -65,8 +65,8 @@ The ``-p`` flag to Docker maps a TCP port in the container to a TCP port on the 
 
 ### Image Name and Tag (Version)
 
-The final line of the Docker command above: ``dbmi/4ce-analysis:version-2.2.0`` specifies the image name and tag that will be run.
-The image name is ``dbmi/4ce-analysis`` and the tag is the string following the colon, e.g. ``version-2.2.0``. 
+The final line of the Docker command above: ``dbmi/4ce-analysis:version-2.3.0`` specifies the image name and tag that will be run.
+The image name is ``dbmi/4ce-analysis`` and the tag is the string following the colon, e.g. ``version-2.3.0``. 
 We will use tags to track the version of the container that each site is running locally.
 We will attempt to keep this documentation up-to-date with instructions for running the latest release version, but you can 
 always refer to the container's registry page https://hub.docker.com/repository/docker/dbmi/4ce-analysis/tags?page=1 for 
@@ -169,7 +169,7 @@ connect to the container.
 A final option is to run the container in a way that directly presents the user with an interactive R session. The container will stop after you quit this R session. Note, this command runs the container so you can't already have one running when issuing it. The --rm flag will ensure that when the R session is quit, the container is stopped and cleaned up.
 
 ```bash
-docker run --name 4ce -v /SOME_LOCAL_PATH:/4ceData --rm -it dbmi/4ce-analysis:version-2.2.0 R
+docker run --name 4ce -v /SOME_LOCAL_PATH:/4ceData --rm -it dbmi/4ce-analysis:version-2.3.0 R
 ```
 
 
@@ -183,7 +183,7 @@ In more detail, the steps are are follows:
 
 ### 1. On the *bastion* host: Pull the container image from the registry
 ```bash
-docker image rm dbmi/4ce-analysis:version-2.2.0
+docker image rm dbmi/4ce-analysis:version-2.3.0
 docker pull dbmi/4ce-analysis
 ```
 
