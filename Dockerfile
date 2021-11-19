@@ -273,6 +273,9 @@ RUN cp /usr/include/oracle/${ORACLE_RELEASE}.${ORACLE_UPDATE}/client64/* $ORACLE
 # install ROracle
 RUN Rscript -e "install.packages('ROracle')" 
 
+# we're going to move to using the remotes package to makage package installation going forward
+RUN Rscript --vanilla -e "remotes::install_cran('stm', repos='https://cran.microsoft.com/snapshot/2021-11-18')"
+
  # allow modification of these locations so users can install R packages without warnings
 RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/library
 RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/doc/html/packages.html
@@ -285,8 +288,8 @@ RUN chmod -R 777 /opt/microsoft/ropen/$MRO_VERSION/lib64/R/doc/html/packages.htm
 RUN mkdir /opt/rstudioserver
 WORKDIR /opt/rstudioserver
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb
-RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.6_amd64.deb
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.7_amd64.deb
+RUN dpkg -i ./libssl1.0.0_1.0.2n-1ubuntu5.7_amd64.deb
 
 RUN apt-get update && apt-get install -y gdebi-core
 
